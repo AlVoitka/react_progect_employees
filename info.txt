@@ -1,0 +1,182 @@
+К заготовке проекта подтягиваю Mpm зависимости:
+npm init 
+
+1. создаю папку components  с  кусочками проректа. И в ней размещаю всю структуру проекта по компонентам.
+Основной компонент - app .это основной компонент, объеденяющий в себе все остальные
+
+2. Подключаю  готовые стили и иконки со стороннего cdn сервера (Сеть доставки контента (Content Delivery Network), или CDN)
+https://cdnjs.com/
+- в поиске ищу bootstrap  копирую и вставляю в index.html  линк-тег подключения
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+ненужные атрибута можно удалить, было так:
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.1/js/bootstrap.min.js" 
+integrity="sha512-ewfXo9Gq53e1q1+WDTjaHAGZ8UvCWq0eXONhwDuIoaH8xz2r96uoAYaQCm1oQhnBfRXrvJztNXFsTloJfgbL5Q==" 
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+- так же подключю иклнки font-awesome
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+3. Задаю каждому компоненту стили css
+
+К примеру добавлю стили к основному компоненту app:
+Для этого создам файл app.scc и в нем:
+
+.app {
+    margin: 0 auto;
+    max-width: 1000px;
+  }
+
+4. Теперь начну работу в файле app.js:
+
+4.1 создаю функцию App которая будет возвращать структуру.
+Внутри создам див который обернет все структуру (правило работы с реактом) и задам ему класс "app", 
+который я прописал в файле css
+
+function App() {
+  return (
+    <div className="app">
+        
+    </div>
+  );
+}
+
+export default App;  - экспортирую по умолчанию компонент App, а принимать его будет файл index.js, в нем я импорирую его:
+
+import App from './components/app/app';  -/app/app.js - но для вэбпека нужно прописывать без.js
+
+
+4.2 теперь заимпортирую файл app.css:
+
+import './app.css'; - теперь когда вэбпэк будет собирать приложение он будет импортировать этот файл в общие стили
+
+
+Теперь можно запустить и проверить:
+
+npm start
+
+
+5. Начинаю работать по каждому из компонентов. app-info:
+
+- app-info.js - тут начинаю cоздавать отдельный компонент:
+
+import "./app-info.css"; 
+
+const AppInfo = () => {
+    return (
+        <div className="app-info">
+            <h1>Учет сотрудников в компании N</h1>
+            <h2>Общее число сотрудников:</h2>
+            <h2>Премию получат:</h2>
+        </div>
+    )
+}
+
+export default AppInfo;
+
+5.1 Задаю стили в app-info.css:
+беру класс className="app-info" И
+
+.app-info {
+    padding: 25px;
+    background-color: #3d5a80;
+    border-radius: 4px;
+    box-shadow: 15px 15px 30px rgba(0,0,0, .15);
+    color: #fff;
+}
+
+и для того чтобы все стили импорировалиь в общий файл:
+
+import "./app-info.css";   
+и принимею их в файле app.js:
+
+import AppInfo from '../app-info/app-info';
+
+и соответствено этот компонент помещаю в функцию App:
+
+function App() {
+  return (
+    <div className="app">
+        <AppInfo />
+    </div>
+  );
+}
+
+6. Следующий компонент search-panel
+он состоит из двух функциональностей: фильтра и инпута. Поэтому в файле app.js я помещу
+две этих компанента в див:
+
+        <div className="search-panel">
+            <SearchPanel/>
+            <AppFilter/>
+        </div>
+
+а делле все как и раньше:
+ в SearchPanel.js:
+
+import './search-panel.css';
+
+const SearchPanel = () => {
+    return (
+        <input type="text"
+                className="form-control search-input"
+                placeholder="Найти сотрудника"/>
+    )
+}
+
+export default SearchPanel;
+
+
+классы для инпута className="form-control search-input"  - они берутся из библиотеки bootstrap. Тоесть я их не прописываю, а сам, а подтягиваю.
+
+И теперь импортирую в главный компонент с приложением app.js:
+
+import SearchPanel from '../search-panel/search-panel';
+и добавляю его в функцию App:
+
+function App() {
+  return (
+    <div className="app">
+        <AppInfo />
+
+        <div className="search-panel">
+            <SearchPanel/>
+            <AppFilter/>
+        </div>
+               
+    </div>
+  );
+}
+
+export default App;
+
+
+7. Создаю компонент app-filter
+тут все по аналогии. И классы для стилей подтягиваются из Bootsrtap, а именн на 
+https://getbootstrap.com/docs/5.0/components/buttons/ 
+и тут пример:
+<button type="button" class="btn btn-light">Light</button>
+
+
+8.Все оставшиеся компоненты по аналогии, но с компонентом EmployeesList есть нюанс.
+Это компонент будет в себе содержать компонет EmployeesListItem, тоесть я буду его переиспользовать.
+Для этого нужно в файл EmployeesList.js импортировать EmployeesListItem :
+
+import EmployeesListItem from "../employees-list-item/employees-list-item";
+
+import './employees-list.css';
+
+const EmployeesList = () => {
+    return (
+        <ul className="app-list list-group">
+            <EmployeesListItem/>
+            <EmployeesListItem/>
+            <EmployeesListItem/>
+        </ul>
+    )
+}
+
+export default EmployeesList;
+
+И теперь в главном фале app.js импортирую только EmployeesList тк EmployeesListItem уже внутри его.
+
+import EmployeesList from '../employees-list/employees-list';
