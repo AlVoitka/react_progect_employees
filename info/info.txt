@@ -398,7 +398,7 @@ return (
     подставляю {classNames}:
 
     return (
-        <li className={classNames}>
+        <li className={classNames}>  ----- вот тут
             <span className="list-group-item-label">{name}</span>
             <input type="text" className="list-group-item-input" defaultValue={salary +'$'}/>
             <div className='d-flex justify-content-center align-items-center'>
