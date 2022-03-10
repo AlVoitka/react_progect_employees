@@ -1,3 +1,11 @@
+Git 
+1. git add . 
+2. git commit -m"..."
+3. git push -u origin master
+
+
+//////////////  90  /////////////////
+
 К заготовке проекта подтягиваю Mpm зависимости:
 npm init 
 
@@ -180,3 +188,233 @@ export default EmployeesList;
 И теперь в главном фале app.js импортирую только EmployeesList тк EmployeesListItem уже внутри его.
 
 import EmployeesList from '../employees-list/employees-list';
+
+/////////////////  92  /////////////
+
+1.добавлю в компонты пропсы ( props )
+
+так у меня было:
+  const EmployeesList = () => {
+    return (
+        <ul className="app-list list-group">
+            <EmployeesListItem/>
+            <EmployeesListItem/>
+            <EmployeesListItem/>
+            <EmployeesListItem/>
+            <EmployeesListItem/>
+        </ul>
+    )
+}
+
+после зобавления пропсов:
+const EmployeesList = () => {
+    return (
+        <ul className="app-list list-group">
+            <EmployeesListItem name="Vitia M." salary={300}/>
+            <EmployeesListItem name="Tolia N." salary={400}/>
+            <EmployeesListItem name="Valera S." salary={500}/>
+            <EmployeesListItem name="Vitalt L." salary={700}/>
+            <EmployeesListItem name="Alex V." salary={900}/>
+        </ul>
+    )
+}
+
+и теперь их нужно использовать, в файле employees-list-item.js  я передаю как аргумент в функцию эти пропсы:
+и в span  заменяю имя на {props.name}. А также зап 1000$  заменяю на 
+
+const EmployeesListItem = (props) => { ------------вот
+    return (
+        <li className="list-group-item d-flex justify-content-between">
+            <span className="list-group-item-label">{props.name}</span>  ----------вот
+            <input type="text" className="list-group-item-input" defaultValue={props.salary +'$'}/> ----- вот
+            <div className='d-flex justify-content-center align-items-center'>
+
+
+Для того чтобы код лучше читался, применияю деструтуризацию. Я пропсы разрезаю на части:            
+было так
+
+const EmployeesListItem = (props) => {
+    return (
+        <li className="list-group-item d-flex justify-content-between">
+            <span className="list-group-item-label">{props.name}</span>
+            <input type="text" className="list-group-item-input" defaultValue={props.salary +'$'}/>
+
+сделал так
+
+const EmployeesListItem = ({name, salary}) => {   -------вот разрезал
+    return (
+        <li className="list-group-item d-flex justify-content-between">
+            <span className="list-group-item-label">{name}</span>  -----------------вот сократил 
+            <input type="text" className="list-group-item-input" defaultValue={salary +'$'}/>  ------------- вот сократил
+
+2. Но запалнять каждого сотрудника вручною это не ризонно, нужно откуда то получать данные и автоматом прописывать их.
+В идеале эти данные должны приходить с сервера.Но на данном этапе я симитирую данные которые типо приходят с сервера.
+В файле app.js  в вункции App создам бузу данных, как буд то бы она пришла к нам с сервера:
+
+function App() {
+
+  const data = [
+    {name: 'Ales K.', salary: 800},
+    {name: 'Ales M.', salary: 700},
+    {name: 'Ales S.', salary: 600},
+  ];
+
+  данные пришли, теперь их нужно использовать:
+  я передаю их в компонент массив с данными :
+
+  function App() {
+
+  const data = [
+    {name: 'Ales K.', salary: 800},
+    {name: 'Ales M.', salary: 700},
+    {name: 'Ales S.', salary: 600},
+  ];
+
+  return (
+    <div className="app">
+        <AppInfo />
+
+        <div className="search-panel">
+            <SearchPanel/>
+            <AppFilter/>
+        </div>
+        
+        <EmployeesList data={data}/>   ------------ вот таким образом передал массив данных
+        <EmployeesAddForm/>
+    </div>
+  );
+}
+
+export default App;
+
+
+И вот теперь мне нужно принять его в employees-list.js:
+
+const EmployeesList = ({data}) => {  ----------------  пот передал в виде аргумента
+    return (
+        <ul className="app-list list-group">
+            <EmployeesListItem name="Vitia M." salary={300}/>
+            <EmployeesListItem name="Tolia N." salary={400}/>
+            <EmployeesListItem name="Valera S." salary={500}/>
+            <EmployeesListItem name="Vitalt L." salary={700}/>
+            <EmployeesListItem name="Alex V." salary={900}/>
+        </ul>
+    )
+}
+
+и далее нужно перебрать каждый элемент масив ( базы данных data) И сформировать каждый новый компонент EmployeesListItem.
+Делаю это при помощи метода перебора .map - он подходит тк возвращает.
+
+создаю переменную в нее записываю базу данных и запускаю метод map. у нег внутри колбэк функция где item - это
+каждый отдельный элемент из массива data. И внутри я возвращаю те помещаю  компонент
+<EmployeesListItem /> и на значаю ему пропсы и вместо жестких значений что раньше прописывал руками, я беру каждое из этих значений
+ из item - ведь он и есть каждый последовательный элемент из массива:
+  name={item.name} salary={item.salary}
+
+const EmployeesList = ({data}) => {
+
+    const elements = data.map(item => {
+        return (
+            <EmployeesListItem name={item.name} salary={item.salary}/>
+        )
+    })
+
+и вместо рукотворных компонентов  я подставляю переменную со значениями после переборки :
+
+    return (
+        <ul className="app-list list-group">
+            {elements}  ---------------------------вот
+        </ul>
+    )
+}
+
+export default EmployeesList;
+
+Ну и последный штрих дял оптимизации кода:
+
+    const elements = data.map(item => {
+        return (
+            <EmployeesListItem name={item.name} salary={item.salary}/>  --- вот такой синтаксис
+
+            можно заменить использую обджект спред оператор который разворачивает обЪект на отдельные элементы
+
+    const elements = data.map(item => {
+        return (
+            <EmployeesListItem {...item}/> ---- ВОТ НОВЫЙ СИНТАКСИС!!!!!!!!!!!!
+        )
+    })
+
+
+3. Теперь сделаю чтобы при нажатии на кнопку печеньки напротив фамили сотрудника, его данные окрашивались в другой цвет.
+
+для этот добавлю еще один класс increase: для каждого елемента в базе данных data в app.js:
+
+function App() {
+
+  const data = [
+    {name: 'Ales K.', salary: 800, increase: false},
+    {name: 'Ales M.', salary: 700, increase: false},
+    {name: 'Ales S.', salary: 600, increase: false},
+    {name: 'Ales S.', salary: 99999900, increase: true},
+    
+  ];
+
+  и далле в файле Employees-List-Item.js добавляю этот класс как аргумент:
+
+  const EmployeesListItem = ({name, salary, increase}) => {
+    return (
+
+далее создам переменную в которую запишу строчку содержащую все css классы 
+
+let classNames = "list-group-item d-flex justify-content-between";    -вот
+
+и пропишу условие:
+где если  increase в позиции true? то к нему добавится еще один класс
+if (increase) {
+        classNames += ' increase';   - тут вожно поставить пробел, чтобы не слились классы
+    }
+
+и теперь вместо всех классов css для списка li
+
+return (
+        <li className="list-group-item d-flex justify-content-between">   -------вот вместо этих классов
+            <span className="list-group-item-label">{name}</span>
+            <input type="text" className="list-group-item-input" defaultValue={salary +'$'}/>
+            <div className='d-flex justify-content-center align-items-center'>
+                <button type="button"
+                    className="btn-cookie btn-sm ">
+                    <i className="fas fa-cookie"></i>
+                </button>
+
+                <button type="button"
+                        className="btn-trash btn-sm ">
+                    <i className="fas fa-trash"></i>
+                </button>
+                <i className="fas fa-star"></i>
+            </div>
+        </li>
+    )
+
+    подставляю {classNames}:
+
+    return (
+        <li className={classNames}>
+            <span className="list-group-item-label">{name}</span>
+            <input type="text" className="list-group-item-input" defaultValue={salary +'$'}/>
+            <div className='d-flex justify-content-center align-items-center'>
+                <button type="button"
+                    className="btn-cookie btn-sm ">
+                    <i className="fas fa-cookie"></i>
+                </button>
+
+                <button type="button"
+                        className="btn-trash btn-sm ">
+                    <i className="fas fa-trash"></i>
+                </button>
+                <i className="fas fa-star"></i>
+            </div>
+        </li>
+    )
+
+
+
