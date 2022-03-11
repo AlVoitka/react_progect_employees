@@ -344,6 +344,29 @@ export default EmployeesList;
         )
     })
 
+    Но и с таким синтаксисом в консоли разработчика будет выдавать ошибку:
+    index.js:1 Warning: Each child in a list should have a unique "key" prop.
+
+    Для решения нужно поменять синтаксис, 
+
+    const {id, ...itemProps} = item;   - добавляю это
+
+    <EmployeesListItem key={id} {...itemProps}
+
+    и в базе данных четвертым свойством нужно добавить этот идентификатор id:
+    я добавил простой(1-2-3-4), но в реале с сервера будут приходить более сложные айдишки с уникальным ключём.
+
+    function App() {
+
+  const data = [
+    {name: 'Ales K.', salary: 800, increase: false, id: 1},
+    {name: 'Ales M.', salary: 700, increase: false, id: 2},
+    {name: 'Ales S.', salary: 600, increase: false, id: 3},
+    {name: 'Ales S.', salary: 99999900, increase: true, id: 4},
+    
+  ];
+
+
 
 3. Теперь сделаю чтобы при нажатии на кнопку печеньки напротив фамили сотрудника, его данные окрашивались в другой цвет.
 
