@@ -5,9 +5,11 @@ import SearchPanel from '../search-panel/search-panel';
 import AppFilter from '../app-filter/app-filter';
 import EmployeesList from '../employees-list/employees-list';
 import EmployeesAddForm from '../employees-add-form/employees-add-form';
+import MyLearn from '../my-learn/my-learn';
 import BootstrapTest from '../app-bootsrapTest/BootstrapTest';
 
 import './app.css';
+
 
 class App extends Component {
     constructor(props) {
@@ -32,7 +34,7 @@ class App extends Component {
         })
     }
 
-    // Да, пока могут добавляться пустые пользователи. Мы это еще исправим
+    
     addItem = (name, salary) => {
         const newItem = {
             name, 
@@ -109,7 +111,7 @@ class App extends Component {
                     onDelete={this.deleteItem}
                     onToggleProp={this.onToggleProp}/>
                 <EmployeesAddForm onAdd={this.addItem}/>
-
+                <MyLearn name="Alex" surename="Voitka"/>
                 <BootstrapTest/>
             </div>
         );

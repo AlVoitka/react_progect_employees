@@ -1,0 +1,15 @@
+.my-learn {
+    margin: 10px 0;
+    padding: 25px;
+    background-color: #3d5a80;
+    border-radius: 4px;
+    box-shadow: 15px 15px 30px rgba(0,0,0, .15);
+    color: #fff;
+}
+.learn-btn {
+    width: 100px;
+}
+.learn-span {
+    color: rgb(236, 49, 227);
+    font-size: 40px;
+}
