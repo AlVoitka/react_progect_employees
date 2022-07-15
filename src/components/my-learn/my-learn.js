@@ -9,8 +9,10 @@ class MyLearn extends Component {
         super(props); 
 
         this.state = {  
-            sex: 'man',
-            amount: 33
+            sex: '---',
+            amount: 33,
+            position: '',
+            color: false
         } 
     }
 
@@ -26,23 +28,51 @@ class MyLearn extends Component {
         })
     }
 
+    changeColor = () => {
+        this.setState (({color}) => ({
+            color: !color
+        }))
+    }
+
 
     nextPush = () => {
+        console.log('ok');
         this.setState ({
-            amount: this.state.amount + 1
+            amount: this.state.amount + 1,
+        })
+    }
+
+
+    commitInput = (e) => {
+        this.setState ({
+            position: e.target.value
         })
     }
 
 
     render() {
         const {name, surename} = this.props;
+        const {sex, position, amount, color} = this.state;
+
+        let classNames = "learn-btn";
+
+        if (color) {
+            classNames += ' color';
+        }
+
+
         return (
             <div className="my-learn">
-                <h1> My name is {name}, my surname is {surename}, my sex - {this.state.sex} </h1>
-                <button onClick={this.changeSexM} className="learn-btn">Man</button>
-                <button onClick={this.changeSexW} className="learn-btn">Woman</button>
-                <button onClick={this.nextPush} className="learn-btn">Push</button>
-                <span className="learn-span"> {this.state.amount}</span>
+                <h1> My name is {name}, my surname is {surename}, my sex - {sex}, position- {position} </h1>
+                <button onClick={this.changeSexM} className={classNames}>Man</button>
+                <button onClick={this.changeSexW} className={classNames}>Woman</button>
+                <button onClick={this.nextPush} className={classNames}>Push</button>
+                <button onClick={this.changeColor} className={classNames}>ChangeColor</button>
+                <span className="learn-span"> {amount}</span>
+                <form>
+                    <span>Введите должность </span>
+                    <input type="text" onChange={this.commitInput}></input>
+                </form>
                 
             </div>
         )

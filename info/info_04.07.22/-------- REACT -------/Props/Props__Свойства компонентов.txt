@@ -1,7 +1,9 @@
+Props - он же проперти, он же свойства компонента.
 как пропсы можно передавать обЪекты, функции или просто значения.
 
+
 1.
-Имею компонент WhoAmI который возвращает верстку:
+Имею функциональный компонент WhoAmI который возвращает верстку:
 
 function WhoAmI () {
   return (
@@ -75,6 +77,49 @@ function WhoAmI ({name, surename, link}) { ---- вот деструктурир�
   )
 }
 
+А в функциональном компоненте синтаксис деструктуризации выглядит так:
+  class MyLearn extends Component {
+
+
+    constructor(props) {
+        super(props); 
+
+        this.state = {  
+            sex: '---',
+            amount: 33,
+            position: '',
+            color: false
+        } 
+    }
+
+    render() {
+        const {name, surename} = this.props;  --- так деструктурирую пропсы
+        const {sex, position, amount, color} = this.state;  --- так состояние
+
+        let classNames = "learn-btn";
+
+        if (color) {
+            classNames += ' color';
+        }
+
+
+        return (
+            <div className="my-learn">
+                <h1> My name is {name}, my surname is {surename}, my sex - {sex}, position- {position} </h1>
+                <button onClick={this.changeSexM} className={classNames}>Man</button>
+                <button onClick={this.changeSexW} className={classNames}>Woman</button>
+                <button onClick={this.nextPush} className={classNames}>Push</button>
+                <button onClick={this.changeColor} className={classNames}>ChangeColor</button>
+                <span className="learn-span"> {amount}</span>
+                <form>
+                    <span>Введите должность </span>
+                    <input type="text" onChange={this.commitInput}></input>
+                </form>
+                
+            </div>
+        )
+    }
+
 
 //////////////////////////////////////////////////////////////////////
 
@@ -93,7 +138,7 @@ function WhoAmI ({name, surename, link}) { ---- вот деструктурир�
     )
 }
 
-после добавления пропсов:
+добавленияю пропсов как атрибуты name И salary:
 const EmployeesList = () => {
     return (
         <ul className="app-list list-group">
@@ -106,8 +151,7 @@ const EmployeesList = () => {
     )
 }
 
-и теперь их нужно использовать, в файле employees-list-item.js  я передаю как аргумент в функцию эти пропсы:
-и в span  заменяю имя на {props.name}. А также зап 1000$  заменяю на 
+и теперь их нужно использовать,  передаю как аргумент в функцию эти пропсы:
 
 const EmployeesListItem = (props) => { ------------вот
     return (

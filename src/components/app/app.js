@@ -27,6 +27,7 @@ class App extends Component {
     }
 
     deleteItem = (id) => {
+        console.log(id);
         this.setState(({data}) => {
             return {
                 data: data.filter(item => item.id !== id)

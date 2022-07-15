@@ -1,3 +1,5 @@
+примеры https://dsgnmania.com/web-design/html-css/hover-effects/
+
 
 Eсли хочу использовать hover для появления и исчесновения элемента, и чтообы был еффект плавности
 при помощи transition, то display:none/block не подходит!!!!!!!!!!
